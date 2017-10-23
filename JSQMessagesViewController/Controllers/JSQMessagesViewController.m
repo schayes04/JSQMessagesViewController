@@ -211,6 +211,14 @@ JSQMessagesKeyboardControllerDelegate>
                                                                      panGestureRecognizer:self.collectionView.panGestureRecognizer
                                                                                  delegate:self];
     }
+    
+    // Fix scroll view behavior on iOS 11
+    if (@available(iOS 11.0, *)) {
+        CGFloat topBarHeight = [self navigationController].navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
+        [self.collectionView setContentInset:UIEdgeInsetsMake(topBarHeight, 0.0, 0.0, 0.0)];
+        [self.collectionView setScrollIndicatorInsets:self.collectionView.contentInset];
+        [self.collectionView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+    }
 }
 
 - (void)dealloc
