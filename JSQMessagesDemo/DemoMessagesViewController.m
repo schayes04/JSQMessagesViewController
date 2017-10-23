@@ -43,7 +43,7 @@
     self.senderId = kJSQDemoAvatarIdSquires;
     self.senderDisplayName = kJSQDemoAvatarDisplayNameSquires;
     
-    self.inputToolbar.contentView.textView.pasteDelegate = self;
+    self.inputToolbar.contentView.textView.textPasteDelegate = self;
     
     /**
      *  Load up our fake data for the demo
@@ -65,7 +65,7 @@
     self.showLoadEarlierMessagesHeader = YES;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage jsq_defaultTypingIndicatorImage]
-                                                                              style:UIBarButtonItemStyleBordered
+                                                                              style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                              action:@selector(receiveMessagePressed:)];
 
@@ -264,11 +264,9 @@
         /**
          *  Upon receiving a message, you should:
          *
-         *  1. Play sound (optional)
-         *  2. Add new id<JSQMessageData> object to your data source
-         *  3. Call `finishReceivingMessage`
+         *  1. Add new id<JSQMessageData> object to your data source
+         *  2. Call `finishReceivingMessage`
          */
-        [JSQSystemSoundPlayer jsq_playMessageReceivedSound];
         [self.demoData.messages addObject:newMessage];
         [self finishReceivingMessageAnimated:YES];
         
@@ -333,12 +331,9 @@
     /**
      *  Sending a message. Your implementation of this method should do *at least* the following:
      *
-     *  1. Play sound (optional)
-     *  2. Add new id<JSQMessageData> object to your data source
-     *  3. Call `finishSendingMessage`
+     *  1. Add new id<JSQMessageData> object to your data source
+     *  2. Call `finishSendingMessage`
      */
-    [JSQSystemSoundPlayer jsq_playMessageSentSound];
-    
     JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
                                              senderDisplayName:senderDisplayName
                                                           date:date
@@ -352,7 +347,7 @@
 - (void)didPressAccessoryButton:(UIButton *)sender
 {
     [self.inputToolbar.contentView.textView resignFirstResponder];
-
+    
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages"
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
@@ -392,8 +387,6 @@
             [self.demoData addAudioMediaMessage];
             break;
     }
-    
-    [JSQSystemSoundPlayer jsq_playMessageSentSound];
     
     [self finishSendingMessageAnimated:YES];
 }
